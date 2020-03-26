@@ -1,14 +1,16 @@
 import org.junit.*;
 import utilities.Util;
 
+import java.math.BigInteger;
+import static org.mockito.Mockito.*;
+
 public class TestUtil {
-    private static Util util;
+    private Util mUtil = mock(Util.class);
     private static Long time;
 
     @BeforeClass
     public static void init() {
         System.out.println("Tests begin");
-        util = new Util();
         time = System.nanoTime();
     }
 
@@ -21,26 +23,33 @@ public class TestUtil {
 
     @Test
     public void testConcatenateWordsCustomString() {
-        String res = util.concatenateWords("a", "b", "c", " d");
+        when(mUtil.concatenateWords("a", "b", "c", " d")).thenReturn("abc d");
+        String res = mUtil.concatenateWords("a", "b", "c", " d");
         Assert.assertEquals("abc d", res);
+        verify(mUtil).concatenateWords("a", "b", "c", " d");
     }
 
     @Test
     public void testConcatenateWordsEmptyString() {
-        String res = util.concatenateWords("", "", "");
+        when(mUtil.concatenateWords("", "", "")).thenReturn("");
+        String res = mUtil.concatenateWords("", "", "");
         Assert.assertEquals("", res);
+        verify(mUtil).concatenateWords("", "", "");
     }
 
     @Test
     public void testConcatenateWordsNull() {
-        String res = util.concatenateWords((String) null);
+        when(mUtil.concatenateWords((String) null)).thenReturn("");
+        String res = mUtil.concatenateWords((String) null);
         Assert.assertNull(res);
+        verify(mUtil).concatenateWords((String) null);
     }
 
     @Ignore
     @Test
     public void testComputeFactorial() {
-        Long res = util.computeFactorial(5);
-        if (res != 120) Assert.fail();
+        BigInteger res = mUtil.computeFactorial(5);
+        BigInteger prom = new BigInteger(String.valueOf(120));
+        if (!res.equals(prom)) Assert.fail();
     }
 }
